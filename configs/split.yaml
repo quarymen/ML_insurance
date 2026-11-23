@@ -1,0 +1,11 @@
+seed: 42
+
+# Параметры разбиения
+test_size: 1_000_000
+val_fraction: 0.15
+# Надо вписать путь к обработанному датасету
+data_path: data/train.csv
+target_column: Response  
+
+# Куда сохранять индексы разбиения (тоже изменить, если не верно)
+output_dir: data/splits
