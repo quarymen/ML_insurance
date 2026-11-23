@@ -1,0 +1,81 @@
+{% extends 'predictor/base.html' %}
+
+{% block content %}
+<!-- Блок с описанием -->
+<div class="row mb-4">
+    <div class="col-12 text-center">
+        <h2 class="fw-bold text-dark">Прогноз покупки страховки</h2>
+        <p class="text-muted">Заполните анкету клиента, и модель машинного обучения оценит вероятность того, что он купит страховку.</p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Левая колонка: Форма -->
+    <div class="col-md-7">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h5 class="card-title mb-4 border-bottom pb-2">Данные клиента</h5>
+
+                <form method="post" action="">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        {% for field in form %}
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary small">{{ field.label }}</label>
+                                {{ field }}
+
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ field.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Рассчитать вероятность</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Правая колонка: Результат -->
+    <div class="col-md-5">
+        {% if result %}
+            <div class="card shadow-sm border-0" style="border-top: 5px solid navy !important;">
+                <div class="card-body text-center p-4">
+                    <h5 class="card-title text-muted mb-4">Результат прогноза</h5>
+
+                    <div class="display-3 fw-bold mb-2 text-primary">
+                        {{ result.probability_percent }}%
+                    </div>
+                    <p class="text-muted small mb-4">Вероятность покупки</p>
+
+                    <div class="p-3 bg-light rounded mb-3">
+                        <span class="fw-semibold">Решение модели:</span><br>
+                        {% if result.prediction == 1 %}
+                            <span class="badge bg-success fs-6 mt-2 px-3 py-2">Клиент купит страховку</span>
+                        {% else %}
+                            <span class="badge bg-secondary fs-6 mt-2 px-3 py-2">Клиент не купит</span>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+                    <p class="text-muted small mb-0">Версия модели: <code>{{ result.model_version }}</code></p>
+                </div>
+            </div>
+        {% else %}
+            <div class="card shadow-sm border-0 bg-light h-100 d-flex justify-content-center align-items-center" style="min-height: 300px;">
+                <div class="text-center text-muted p-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-bar-chart-line mb-3" viewBox="0 0 16 16">
+                      <path d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2zm1 12h2V2h-2v12zm-3 0V7H7v7h2zm-4 0v-3H3v3h2z"/>
+                    </svg>
+                    <h5>Ожидание данных</h5>
+                    <p class="small">Заполните форму слева и нажмите кнопку, чтобы увидеть результат.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
