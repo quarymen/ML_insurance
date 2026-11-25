@@ -10,3 +10,23 @@ python3 scripts/download_dataset.py
 ```
 
 Скрипт скачает датасет с Яндекс.Диска и сохранит его в `data/train.csv`. Для работы требуется доступ в интернет. Файл занимает около 663 МБ.
+
+## Веб-интерфейс (Django)
+
+Проект включает в себя веб-интерфейс для предсказания вероятности покупки страховки.
+
+### Запуск локально (для разработки)
+1. Создайте виртуальное окружение: `python -m venv .venv`
+2. Активируйте его: 
+   - Windows: `.venv\Scripts\activate`
+   - Linux/Mac: `source .venv/bin/activate`
+3. Установите зависимости: `pip install -r requirements.txt`
+4. Перейдите в папку с Django: `cd app`
+5. Запустите сервер: `python manage.py runserver`
+6. Откройте `http://127.0.0.1:8000/`
+
+### Запуск через Docker
+1. Убедитесь, что у вас установлен Docker Desktop.
+2. В корне проекта выполните:
+   ```bash
+   docker compose up --build
